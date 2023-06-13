@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+
+    <!-- Boostrap minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <script src="https://kit.fontawesome.com/5db52d2294.js" crossorigin="anonymous"></script>
+
+    <script>
+        function displayModalCarousel(clicked) {
+
+            //Reset all class attributes of items
+            var items = document.getElementsByClassName("carousel-item");
+            for (let i = 0; i < items.length; i++) {
+
+                items[i].className = "carousel-item";
+
+            }
+
+            //add active class
+            var element = document.getElementsByClassName("carousel-item")[clicked];
+
+            element.className += " active";
+
+            document.getElementsByClassName("modalCarousel")[0].style.display = "flex"
+        }
+
+        function hideCarousel() {
+            document.getElementsByClassName("modalCarousel")[0].style.display = "none"
+        }
+    </script>
+</head>
+
+<body>
+    <!-- form modal -->
+    <button type="button" class="btn btn-primary" id="uploadButton" data-toggle="modal"
+        data-target=".bs-example-modal-lg">Upload
+        Image</button>
+
+    <div class="modal fade bs-example-modal-lg" tabi="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Upload new image</h3>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadForm" action="/" method="post" enctype="multipart/form-data" accept="image/*"
+                        class="form-group d-flex justify-content-center">
+
+                        <label class="file">
+                            <input type="file" id="file" name="file" required>
+                            <span class="customFile"></span>
+                        </label>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secundary" data-dismiss="modal" type="button">Cancel</button>
+                    <button class="btn btn-primary" type="submit" form="uploadForm">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav th:insert="navbar.html :: nav"></nav>
+
+    <!-- Gallery thumbnails -->
+    <div class="gallery">
+        <div th:id="${status.index}" onclick="displayModalCarousel(this.id)" th:each=" image, status : ${images}"
+            class="col-4 col-md-2 imgContainer">
+            <div>
+                <img th:src="${image}" class="img-fluid img-thumbnail imgThumb">
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery carousel -->
+    <div id="carouselExampleControls" class="carousel slide modalCarousel" data-interval="false" data-ride="carousel"
+        tabi="-1">
+        <span onclick="hideCarousel()" id="exit-icon"><i class="far fa-times-circle fa-5x"></i></span>
+        <div class="carousel-inner">
+            <div th:each=" image, status: ${images}" class="carousel-item">
+                <img class="d-block mx-auto" th:src="${image}">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+    <!-- JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
